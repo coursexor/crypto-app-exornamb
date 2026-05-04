@@ -9,7 +9,7 @@ function TopMoverCard({ coin }) {
     const change = coin.change24h || parseFloat(coin.change?.replace('%', '')) || 0;
     const isNeg = change < 0;
     const price = coin.price?.toString().startsWith('GHS') ? coin.price : `GHS ${coin.price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    const image = coin.image || coin.icon;
+    const image = coin.imageUrl || coin.image || coin.icon || coin.image_url;
 
     return (
         <div 
@@ -28,7 +28,7 @@ function TopMoverCard({ coin }) {
 
 function NewListingCard({ coin }) {
     const navigate = useNavigate();
-    const image = coin.image || coin.icon;
+    const image = coin.imageUrl || coin.image || coin.icon || coin.image_url;
     const dateStr = coin.date || (coin.createdAt ? new Date(coin.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "");
     const symbol = coin.symbol || coin.label;
 
@@ -108,24 +108,29 @@ export default function TopMoversSection() {
     const [newListings, setNewListings] = useState([]);
 
     useEffect(() => {
+        const normalize = (data) => data.map(c => ({
+            ...c,
+            imageUrl: c.imageUrl || c.image_url || c.image || c.icon
+        }));
+
         axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/crypto/gainers`, { withCredentials: true })
             .then(res => {
-                if (res.data && res.data.length > 0) setGainers(res.data);
-                else setGainers(TOP_MOVERS);
+                if (res.data && res.data.length > 0) setGainers(normalize(res.data));
+                else setGainers(normalize(TOP_MOVERS));
             })
             .catch(err => {
                 console.error("Failed to fetch gainers:", err);
-                setGainers(TOP_MOVERS);
+                setGainers(normalize(TOP_MOVERS));
             });
 
         axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/crypto/new`, { withCredentials: true })
             .then(res => {
-                if (res.data && res.data.length > 0) setNewListings(res.data);
-                else setNewListings(NEW_COINS);
+                if (res.data && res.data.length > 0) setNewListings(normalize(res.data));
+                else setNewListings(normalize(NEW_COINS));
             })
             .catch(err => {
                 console.error("Failed to fetch new listings:", err);
-                setNewListings(NEW_COINS);
+                setNewListings(normalize(NEW_COINS));
             });
     }, []);
 

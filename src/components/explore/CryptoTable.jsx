@@ -265,7 +265,7 @@ export default function CryptoTable({ filtered, starred, toggleStar }) {
                                     </td>
                                     <td className="py-4 sm:py-6">
                                         <div className="flex items-center gap-3 sm:gap-4">
-                                            <img src={coin.image_url} alt={coin.name} className="h-8 w-8 sm:h-9 sm:w-9 rounded-full object-cover" />
+                                            <img src={coin.imageUrl} alt={coin.name} className="h-8 w-8 sm:h-9 sm:w-9 rounded-full object-cover" />
                                             <div>
                                                 <p className="text-[14px] sm:text-[16px] font-bold text-gray-900 leading-tight">{coin.name}</p>
                                                 <p className="text-[12px] sm:text-[13px] text-gray-500 font-medium">{coin.symbol.toUpperCase()}</p>

@@ -31,6 +31,7 @@ export default function useLiveMarketData() {
 
                     return {
                         ...crypto,
+                        imageUrl: crypto.imageUrl || crypto.image_url || crypto.image,
                         previousPrice: crypto.price,
                         change24h: change,
                         sparkline
