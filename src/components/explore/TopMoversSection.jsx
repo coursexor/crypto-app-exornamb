@@ -101,11 +101,11 @@ export default function TopMoversSection() {
     const [newListings, setNewListings] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/crypto/gainers", { withCredentials: true })
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/crypto/gainers`, { withCredentials: true })
             .then(res => setGainers(res.data))
             .catch(err => console.error("Failed to fetch gainers:", err));
 
-        axios.get("http://localhost:3000/api/crypto/new", { withCredentials: true })
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/crypto/new`, { withCredentials: true })
             .then(res => setNewListings(res.data))
             .catch(err => console.error("Failed to fetch new listings:", err));
     }, []);

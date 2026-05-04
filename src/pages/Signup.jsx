@@ -37,7 +37,7 @@ export default function SignUp() {
                 return;
             }
             try {
-                const res = await axios.post("http://localhost:3000/auth/register", { name, email, password });
+                const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, { name, email, password });
                 if (res.status === 201) {
                     navigate("/signin");
                 }

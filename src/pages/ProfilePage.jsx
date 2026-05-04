@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { getProfile, patchProfile } from "../api/profileApi";
 import { getInitials } from "../utils/format";
@@ -58,7 +58,7 @@ export default function ProfilePage() {
   
   const [toast, setToast] = useState(null); // { type: 'success' | 'error', message: string }
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -74,11 +74,11 @@ export default function ProfilePage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [token, logout, setUser]);
 
   useEffect(() => {
     fetchProfile();
-  }, [token]);
+  }, [fetchProfile]);
 
   useEffect(() => {
     if (toast) {

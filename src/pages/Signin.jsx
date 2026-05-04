@@ -36,7 +36,7 @@ export default function SignIn() {
                 return;
             }
             try {
-                const res = await axios.post("http://localhost:3000/auth/login", 
+                const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, 
                     { email, password }, 
                     { withCredentials: true }
                 );

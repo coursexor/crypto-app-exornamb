@@ -11,7 +11,7 @@ export default function useLiveMarketData() {
         const fetchCryptos = async () => {
             try {
                 // Ensure credentials are sent to match the backend setup
-                const response = await axios.get("http://localhost:3000/api/crypto", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/crypto`, {
                     withCredentials: true
                 });
                 
