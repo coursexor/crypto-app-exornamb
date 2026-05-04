@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { FiSearch, FiGlobe, FiCheck, FiX, FiMenu, FiChevronLeft } from "react-icons/fi";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../Context/AuthContext";
 import AvatarButton from "./AvatarButton";
 import NavDropdown from "./NavDropdown";
 

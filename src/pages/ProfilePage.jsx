@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../Context/AuthContext";
 import { getProfile, patchProfile } from "../api/profileApi";
 import { getInitials } from "../utils/format";
 import TradeView from "../components/Trade/TradeView";

@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../Context/AuthContext";
 import { getInitials } from "../../utils/format";
 
 export default function AvatarButton({ onClick }) {
