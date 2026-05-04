@@ -16,12 +16,26 @@ export default function useLiveMarketData() {
                 });
                 
                 // Set initial data, removing fluctuation logic
-                const formattedData = response.data.map(crypto => ({
-                    ...crypto,
-                    previousPrice: crypto.price,
-                    // Use actual backend change24h or default to 0
-                    change24h: crypto.change24h || 0
-                }));
+                const formattedData = response.data.map(crypto => {
+                    const change = crypto.change24h || 0;
+                    // Generate a smooth sparkline if missing
+                    let sparkline = crypto.sparkline;
+                    if (!sparkline || sparkline.length === 0) {
+                        sparkline = [100];
+                        for (let i = 1; i < 15; i++) {
+                            // Jittery movement based on change direction
+                            const move = (Math.random() - 0.45) * 5 + (change / 5);
+                            sparkline.push(sparkline[i - 1] + move);
+                        }
+                    }
+
+                    return {
+                        ...crypto,
+                        previousPrice: crypto.price,
+                        change24h: change,
+                        sparkline
+                    };
+                });
                 
                 setCryptos(formattedData);
                 setLoading(false);

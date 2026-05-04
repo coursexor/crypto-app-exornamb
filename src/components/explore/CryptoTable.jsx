@@ -1,26 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiChevronDown, FiSearch, FiCheck, FiStar } from "react-icons/fi";
+import Sparkline from "../Trade/Sparkline";
 
-// Sparkline component to mimic the screenshot's smooth lines
-function Sparkline({ isNegative }) {
-    const path = isNegative 
-        ? "M0 10 Q20 30 45 15 T90 25" 
-        : "M0 25 Q20 5 45 20 T90 5";
-    return (
-        <svg viewBox="0 0 90 30" className="h-8 w-20 mx-auto overflow-visible">
-            <path
-                d={path}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="opacity-80"
-            />
-        </svg>
-    );
-}
 const DropdownMenu = ({ name, options, selected, onSelect, openDropdown, setOpenDropdown, currencySearch, setCurrencySearch }) => (
     <div className={`absolute top-full left-0 z-50 mt-2 w-64 rounded-2xl bg-white p-2 shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 ${openDropdown === name ? 'block' : 'hidden'}`}>
         {name === 'currency' && (
@@ -290,8 +272,15 @@ export default function CryptoTable({ filtered, starred, toggleStar }) {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className={`py-4 sm:py-6 text-center ${getCoinColor(coin.symbol)}`}>
-                                        <Sparkline isNegative={isNegative} />
+                                    <td className="py-4 sm:py-6 text-center">
+                                        <div className="flex justify-center">
+                                            <Sparkline 
+                                                data={coin.sparkline} 
+                                                changePercent={coin.change24h} 
+                                                width={90} 
+                                                height={30} 
+                                            />
+                                        </div>
                                     </td>
                                     <td className="py-4 sm:py-6 text-right">
                                         <span className="text-[13px] sm:text-[15px] font-medium text-gray-900">{priceFormatted}</span>
