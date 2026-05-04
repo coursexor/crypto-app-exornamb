@@ -1,0 +1,30 @@
+.coin-img-wrap {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coin-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+}
+
+/* Shimmer while loading */
+.coin-img-loading {
+  animation: coinImgPulse 1s ease-in-out infinite;
+}
+
+@keyframes coinImgPulse {
+  0%, 100% { background-color: #F0F0F0; }
+  50%       { background-color: #E0E0E0; }
+}

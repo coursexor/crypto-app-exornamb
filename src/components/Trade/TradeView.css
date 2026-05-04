@@ -1,0 +1,257 @@
+.trade-view {
+  width: 100%;
+}
+
+.view-enter {
+  animation: viewFadeIn 0.2s ease-out;
+}
+
+@keyframes viewFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.trade-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0A0B0D;
+  margin-bottom: 20px;
+}
+
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.dropdown-container {
+  position: relative;
+}
+
+.filter-pill {
+  background: #F5F5F5;
+  border: 1px solid #E8E8E8;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0A0B0D;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+
+.filter-pill:hover {
+  background: #EBEBEB;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: #FFFFFF;
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  min-width: 140px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #0A0B0D;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.dropdown-item:hover {
+  background: #F7F7F7;
+}
+
+/* TABLE */
+.trade-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.trade-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.trade-table th {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B7280;
+  padding: 12px 16px;
+  border-bottom: 1px solid #E8E8E8;
+  text-align: left;
+  background: #FFFFFF;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.trade-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.trade-table th.sortable:hover {
+  color: #0A0B0D;
+}
+
+.trade-table tr {
+  height: 72px;
+  transition: background 0.12s;
+}
+
+.trade-table tbody tr:hover {
+  background: #FAFAFA;
+}
+
+.trade-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #F3F4F6;
+  font-size: 15px;
+}
+
+.col-star { width: 32px; padding-right: 0 !important; }
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #D1D5DB;
+  cursor: pointer;
+  padding: 4px;
+}
+.star-btn.active { color: #F59E0B; }
+
+.asset-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.asset-names {
+  display: flex;
+  flex-direction: column;
+}
+
+.asset-name {
+  font-weight: 700;
+  color: #0A0B0D;
+}
+
+.asset-ticker {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.price-val {
+  font-weight: 500;
+  color: #0A0B0D;
+}
+
+.change-val {
+  font-weight: 600;
+}
+
+.change-val.pos { color: #0EA56A; }
+.change-val.neg { color: #E53E3E; }
+
+.trade-pill {
+  background: #1652F0;
+  color: #FFFFFF;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.trade-pill:hover {
+  background: #0F3FBB;
+  transform: scale(1.02);
+}
+
+/* PAGINATION */
+.pagination-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.pagination-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.pag-btn {
+  background: #F5F5F5;
+  border: 1px solid #E8E8E8;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0A0B0D;
+  cursor: pointer;
+}
+
+.pag-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* SKELETON */
+.skeleton-row td {
+  padding: 24px 16px;
+}
+
+.skeleton-line {
+  height: 24px;
+  background: #F0F0F0;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.pulse {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.text-right { text-align: right; }
+.error-cell, .empty-cell {
+  text-align: center;
+  padding: 40px;
+  color: #6B7280;
+}
+
+.retry-btn {
+  margin-top: 12px;
+  background: #1652F0;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
