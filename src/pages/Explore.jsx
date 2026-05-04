@@ -56,7 +56,7 @@ export default function Explore() {
                                 <span>Coinbase 50 Index is up</span>
                                 <span className="inline-flex items-center gap-0.5 font-medium">
                                     <FiArrowUpRight size={13} strokeWidth={2.5} className="text-emerald-500" />
-                                    <span>0.95% (24hrs)</span>
+                                    <span>1.86% (24hrs)</span>
                                 </span>
                                 <button
                                     onClick={() => setShowCoin50Modal(true)}

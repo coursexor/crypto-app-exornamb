@@ -1,39 +1,46 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { TOP_MOVERS, NEW_COINS } from "../../data/exploreData";
 
 
 function TopMoverCard({ coin }) {
     const navigate = useNavigate();
-    const isNeg = coin.change24h < 0;
+    const change = coin.change24h || parseFloat(coin.change?.replace('%', '')) || 0;
+    const isNeg = change < 0;
+    const price = coin.price?.toString().startsWith('GHS') ? coin.price : `GHS ${coin.price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const image = coin.image || coin.icon;
+
     return (
         <div 
             onClick={() => navigate("/asset-details")}
             className="min-w-[155px] flex-shrink-0 rounded-2xl border border-gray-100 bg-white p-4 hover:shadow-md transition-shadow cursor-pointer"
         >
-            <img src={coin.image} alt={coin.name} className="h-9 w-9 rounded-full object-cover mb-3" />
+            <img src={image} alt={coin.symbol} className="h-9 w-9 rounded-full object-cover mb-3" />
             <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{coin.symbol}</p>
-            <p className="text-[14px] font-bold text-gray-900 leading-tight truncate">{coin.name}</p>
-            <p className={`mt-1 flex items-center gap-0.5 text-[13px] font-semibold ${isNeg ? "text-red-500" : "text-emerald-600"}`}>
-                {isNeg ? "↘" : "↗"} {Math.abs(coin.change24h).toFixed(2)}%
+            <p className={`mt-1 flex items-center gap-0.5 text-[14px] font-bold ${isNeg ? "text-red-500" : "text-emerald-600"}`}>
+                {isNeg ? "↘" : "↗"} {Math.abs(change).toFixed(2)}%
             </p>
-            <p className="text-[12px] text-gray-400 mt-0.5">GHS {coin.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <p className="text-[12px] text-gray-400 mt-0.5">{price}</p>
         </div>
     );
 }
 
 function NewListingCard({ coin }) {
     const navigate = useNavigate();
-    const addedDate = new Date(coin.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const image = coin.image || coin.icon;
+    const dateStr = coin.date || (coin.createdAt ? new Date(coin.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "");
+    const symbol = coin.symbol || coin.label;
+
     return (
         <div 
             onClick={() => navigate("/asset-details")}
             className="min-w-[155px] flex-shrink-0 rounded-2xl border border-gray-100 bg-white p-4 hover:shadow-md transition-shadow cursor-pointer"
         >
-            <img src={coin.image} alt={coin.name} className="h-9 w-9 rounded-full object-cover mb-3" />
-            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{coin.symbol}</p>
+            <img src={image} alt={coin.name} className="h-9 w-9 rounded-full object-cover mb-3" />
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{symbol}</p>
             <p className="text-[14px] font-bold text-gray-900 leading-tight truncate">{coin.name}</p>
-            <p className="text-[12px] text-gray-400 mt-1">Added {addedDate}</p>
+            <p className="text-[12px] text-gray-400 mt-1">{dateStr.startsWith('Added') ? dateStr : `Added ${dateStr}`}</p>
         </div>
     );
 }
@@ -102,12 +109,24 @@ export default function TopMoversSection() {
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/crypto/gainers`, { withCredentials: true })
-            .then(res => setGainers(res.data))
-            .catch(err => console.error("Failed to fetch gainers:", err));
+            .then(res => {
+                if (res.data && res.data.length > 0) setGainers(res.data);
+                else setGainers(TOP_MOVERS);
+            })
+            .catch(err => {
+                console.error("Failed to fetch gainers:", err);
+                setGainers(TOP_MOVERS);
+            });
 
         axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/crypto/new`, { withCredentials: true })
-            .then(res => setNewListings(res.data))
-            .catch(err => console.error("Failed to fetch new listings:", err));
+            .then(res => {
+                if (res.data && res.data.length > 0) setNewListings(res.data);
+                else setNewListings(NEW_COINS);
+            })
+            .catch(err => {
+                console.error("Failed to fetch new listings:", err);
+                setNewListings(NEW_COINS);
+            });
     }, []);
 
     return (

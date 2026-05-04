@@ -46,10 +46,10 @@ export const COINS = [
 ];
 
 export const MARKET_STATS = [
-    { label: "Total market cap", value: "GHS 24.04T", change: "1.43%", neg: true, spark: SPARKS.market1 },
-    { label: "Trade volume", value: "GHS 1.16T", change: "28.66%", neg: true, spark: SPARKS.market2 },
-    { label: "Buy-sell ratio", value: "GHS 0.76", change: "4.01%", neg: true, spark: SPARKS.market3 },
-    { label: "BTC dominance", value: "59.95%", change: "0.30%", neg: true, spark: SPARKS.market4 },
+    { label: "Total market cap", value: "GHS 28.77T", change: "1.57%", neg: false, spark: SPARKS.market1 },
+    { label: "Trade volume", value: "GHS 2.80T", change: "77.09%", neg: false, spark: SPARKS.market2 },
+    { label: "Buy-sell ratio", value: "GHS 0.72", change: "0.62%", neg: false, spark: SPARKS.market3 },
+    { label: "BTC dominance", value: "62.00%", change: "0.05%", neg: false, spark: SPARKS.market4 },
 ];
 
 export const NEW_COINS = [

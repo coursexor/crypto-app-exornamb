@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { FiArrowDownLeft, FiArrowUpRight, FiX } from "react-icons/fi";
 import { MARKET_STATS } from "../../data/exploreData";
 
-const FULL_TEXT = `The overall crypto market is shrinking this week. As of today, the total crypto market capitalization is 28.05 trillion, representing a 0.99% decrease from last week.
+const FULL_TEXT = `The overall crypto market is growing this week. As of today, the total crypto market capitalization is 28.77 trillion, representing a 1.89% increase from last week.
 
-The 24-hour crypto market trading volume has also seen a 1.22% increase over the past day. The top performing cryptocurrencies by price are Superform, BENQI and Drift Protocol. Bitcoin remains the largest cryptocurrency by market capitalization of GHS 17,328,030,818,645.18. Its 24-hour trading volume has seen a 22.51% decrease over the past day. Ethereum, the second largest cryptocurrency by market cap of GHS 3,085,392,944,591.75, has seen its 24-hour trading volume decrease 48.00% in the last day.`;
+The 24-hour crypto market trading volume has also seen a 77.09% increase over the past day. The top performing cryptocurrencies by price are Superform, BENQI and Drift Protocol. Bitcoin remains the largest cryptocurrency by market capitalization of GHS 17,328,030,818,645.18. Its 24-hour trading volume has seen a 22.51% decrease over the past day. Ethereum, the second largest cryptocurrency by market cap of GHS 3,085,392,944,591.75, has seen its 24-hour trading volume decrease 48.00% in the last day.`;
 
-const SHORT_TEXT = `The overall crypto market is shrinking this week. As of today, the total crypto market capitalization is 28.05 trillion, representing a 0.99% decrease from last week.`;
+const SHORT_TEXT = `The overall crypto market is growing this week. As of today, the total crypto market capitalization is 28.77 trillion, representing a 1.89% increase from last week.`;
 
 // Sparkline SVG with area fill
 function Sparkline({ d, neg }) {
