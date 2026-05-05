@@ -1,12 +1,12 @@
-import { createContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { cryptoList } from "../data/crypto";
-
-const AppContext = createContext(null);
+import { AppContext } from "./useApp";
 
 // Provides global state for the application including search query and watchlist
 export function AppProvider({ children }) {
     const [query, setQuery] = useState("");
     const [watchlist, setWatchlist] = useState(() => new Set(["bitcoin", "ethereum"]));
+    const [navTitle, setNavTitle] = useState("");
 
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -30,8 +30,9 @@ export function AppProvider({ children }) {
         toggleWatchlist,
         crypto: cryptoList,
         filtered,
+        navTitle,
+        setNavTitle
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
-

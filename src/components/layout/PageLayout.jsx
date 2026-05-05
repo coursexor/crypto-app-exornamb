@@ -3,8 +3,8 @@ import Footer from "./Footer";
 export default function PageLayout({ children }) {
     return (
         <div className="min-h-screen bg-white">
-        <main>{children}</main>
-        <Footer />
+            <main>{children}</main>
+            <Footer />
         </div>
     );
 }

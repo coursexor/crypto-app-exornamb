@@ -1,17 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useMemo, useRef, useEffect } from "react";
-import { FiSearch, FiGlobe, FiCheck, FiX, FiMenu, FiChevronLeft } from "react-icons/fi";
+import { FiSearch, FiGlobe, FiCheck, FiX, FiMenu, FiChevronLeft, FiBell, FiHelpCircle, FiChevronDown } from "react-icons/fi";
 import { useAuth } from "../../Context/AuthContext";
+import { useApp } from "../../Context/useApp";
 import AvatarButton from "./AvatarButton";
 import NavDropdown from "./NavDropdown";
 
 import logo from "../../assets/coinbase_logo.png";
-import bitcoin  from "../../assets/bitcoin.png";
+import bitcoin from "../../assets/bitcoin.png";
 import ethereum from "../../assets/ethereum.png";
-import tether   from "../../assets/tether.png";
-import usdc     from "../../assets/usdc.png";
-import bnb      from "../../assets/bnb.png";
-import xrp      from "../../assets/xrp.png";
+import tether from "../../assets/tether.png";
+import usdc from "../../assets/usdc.png";
+import bnb from "../../assets/bnb.png";
+import xrp from "../../assets/xrp.png";
 
 /* ── DATA ─────────────────────────────────────────────── */
 const TABS = ["Top", "Crypto", "Stocks", "Predictions", "Perpetuals", "Futures"];
@@ -19,37 +20,37 @@ const TABS = ["Top", "Crypto", "Stocks", "Predictions", "Perpetuals", "Futures"]
 const RESULTS = {
   Top: {
     CRYPTO: [
-      { name:"Bitcoin",  rank:1, symbol:"BTC",  vol:"GHS 30.4B vol", mcap:"GHS 1.5T mcap",  price:"GHS 77,352.38", change:"+1.71%", neg:false, img: bitcoin  },
-      { name:"Ethereum", rank:2, symbol:"ETH",  vol:"GHS 10.9B vol", mcap:"GHS 275.8B mcap", price:"GHS 2,285.38",  change:"+1.09%", neg:false, img: ethereum },
-      { name:"Tether",   rank:3, symbol:"USDT", vol:"GHS 111.2B vol",mcap:"GHS 189.5B mcap", price:"GHS 0.9996",   change:"+0.01%", neg:false, img: tether   },
+      { name: "Bitcoin", rank: 1, symbol: "BTC", vol: "GHS 30.4B vol", mcap: "GHS 1.5T mcap", price: "GHS 77,352.38", change: "+1.71%", neg: false, img: bitcoin },
+      { name: "Ethereum", rank: 2, symbol: "ETH", vol: "GHS 10.9B vol", mcap: "GHS 275.8B mcap", price: "GHS 2,285.38", change: "+1.09%", neg: false, img: ethereum },
+      { name: "Tether", rank: 3, symbol: "USDT", vol: "GHS 111.2B vol", mcap: "GHS 189.5B mcap", price: "GHS 0.9996", change: "+0.01%", neg: false, img: tether },
     ],
     STOCKS: [
-      { name:"NVIDIA", rank:null, symbol:"NVDA", vol:"GHS 796.7K vol", mcap:"GHS 4.9T mcap", price:"GHS 199.96", change:"+0.20%", neg:false, img: null },
+      { name: "NVIDIA", rank: null, symbol: "NVDA", vol: "GHS 796.7K vol", mcap: "GHS 4.9T mcap", price: "GHS 199.96", change: "+0.20%", neg: false, img: null },
     ],
   },
   Crypto: {
     CRYPTO: [
-      { name:"Bitcoin",  rank:1, symbol:"BTC",  vol:"GHS 30.4B vol", mcap:"GHS 1.5T mcap",  price:"GHS 77,352.38", change:"+1.71%", neg:false, img: bitcoin  },
-      { name:"Ethereum", rank:2, symbol:"ETH",  vol:"GHS 10.9B vol", mcap:"GHS 275.8B mcap", price:"GHS 2,285.38",  change:"+1.09%", neg:false, img: ethereum },
-      { name:"BNB",      rank:4, symbol:"BNB",  vol:"GHS 5.2B vol",  mcap:"GHS 92.1B mcap",  price:"GHS 590.20",   change:"+0.48%", neg:false, img: bnb      },
-      { name:"XRP",      rank:5, symbol:"XRP",  vol:"GHS 2.1B vol",  mcap:"GHS 45.3B mcap",  price:"GHS 0.52",     change:"-0.75%", neg:true,  img: xrp      },
-      { name:"USDC",     rank:6, symbol:"USDC", vol:"GHS 8.0B vol",  mcap:"GHS 44.1B mcap",  price:"GHS 1.00",     change:"0.00%",  neg:false, img: usdc     },
+      { name: "Bitcoin", rank: 1, symbol: "BTC", vol: "GHS 30.4B vol", mcap: "GHS 1.5T mcap", price: "GHS 77,352.38", change: "+1.71%", neg: false, img: bitcoin },
+      { name: "Ethereum", rank: 2, symbol: "ETH", vol: "GHS 10.9B vol", mcap: "GHS 275.8B mcap", price: "GHS 2,285.38", change: "+1.09%", neg: false, img: ethereum },
+      { name: "BNB", rank: 4, symbol: "BNB", vol: "GHS 5.2B vol", mcap: "GHS 92.1B mcap", price: "GHS 590.20", change: "+0.48%", neg: false, img: bnb },
+      { name: "XRP", rank: 5, symbol: "XRP", vol: "GHS 2.1B vol", mcap: "GHS 45.3B mcap", price: "GHS 0.52", change: "-0.75%", neg: true, img: xrp },
+      { name: "USDC", rank: 6, symbol: "USDC", vol: "GHS 8.0B vol", mcap: "GHS 44.1B mcap", price: "GHS 1.00", change: "0.00%", neg: false, img: usdc },
     ],
   },
-  Stocks:      { STOCKS: [{ name:"NVIDIA", rank:null, symbol:"NVDA", vol:"GHS 796.7K vol", mcap:"GHS 4.9T mcap", price:"GHS 199.96", change:"+0.20%", neg:false, img:null }] },
+  Stocks: { STOCKS: [{ name: "NVIDIA", rank: null, symbol: "NVDA", vol: "GHS 796.7K vol", mcap: "GHS 4.9T mcap", price: "GHS 199.96", change: "+0.20%", neg: false, img: null }] },
   Predictions: {},
-  Perpetuals:  {},
-  Futures:     {},
+  Perpetuals: {},
+  Futures: {},
 };
 
 const LANGUAGES = [
-  { name:"English",  region:"Global"         },
-  { name:"Español",  region:"United States"   },
-  { name:"English",  region:"United States"   },
-  { name:"Deutsch",  region:"Germany"         },
-  { name:"English",  region:"Germany"         },
-  { name:"English",  region:"Australia"       },
-  { name:"Français", region:"France"          },
+  { name: "English", region: "Global" },
+  { name: "Español", region: "United States" },
+  { name: "English", region: "United States" },
+  { name: "Deutsch", region: "Germany" },
+  { name: "English", region: "Germany" },
+  { name: "English", region: "Australia" },
+  { name: "Français", region: "France" },
 ];
 
 /* ── NAV SUB-MENUS ────────────────────────────────────── */
@@ -57,27 +58,27 @@ const NAV_SUBMENUS = {
   individuals: {
     sections: [{
       items: [
-        { icon:"🔵", title:"Buy and sell",     desc:"Buy, sell, and use crypto" },
-        { icon:"％", title:"Earn",             desc:"Stake your crypto and earn rewards" },
-        { icon:"💎", title:"Private Client",   desc:"For trusts, family offices, UHNWIs" },
-        { icon:"💳", title:"Debit Card",       desc:"Spend crypto, get crypto back" },
-        { icon:"📊", title:"Advanced",         desc:"Professional-grade trading tools" },
-        { icon:"⊘",  title:"Coinbase One",     desc:"Get zero trading fees and more" },
-        { icon:"💳", title:"Credit Card",      desc:"Earn up to 4% bitcoin back" },
-        { icon:"📖", title:"Learn",            desc:"Crypto tips and guides", link:"/learn" },
-        { icon:"⬛", title:"Base App",         desc:"Post, earn, trade, and chat, all in one place" },
-        { icon:"💎", title:"Coinbase Wealth",  desc:"Institutional-grade services for UHNW" },
-        { icon:"🔗", title:"Onchain",          desc:"Dive into the world of onchain apps" },
+        { icon: "🔵", title: "Buy and sell", desc: "Buy, sell, and use crypto" },
+        { icon: "％", title: "Earn", desc: "Stake your crypto and earn rewards" },
+        { icon: "💎", title: "Private Client", desc: "For trusts, family offices, UHNWIs" },
+        { icon: "💳", title: "Debit Card", desc: "Spend crypto, get crypto back" },
+        { icon: "📊", title: "Advanced", desc: "Professional-grade trading tools" },
+        { icon: "⊘", title: "Coinbase One", desc: "Get zero trading fees and more" },
+        { icon: "💳", title: "Credit Card", desc: "Earn up to 4% bitcoin back" },
+        { icon: "📖", title: "Learn", desc: "Crypto tips and guides", link: "/learn" },
+        { icon: "⬛", title: "Base App", desc: "Post, earn, trade, and chat, all in one place" },
+        { icon: "💎", title: "Coinbase Wealth", desc: "Institutional-grade services for UHNW" },
+        { icon: "🔗", title: "Onchain", desc: "Dive into the world of onchain apps" },
       ]
     }]
   },
   businesses: {
     sections: [{
       items: [
-        { icon:"🗂",  title:"Business",        desc:"Crypto trading and payments for startups and SMBs" },
-        { icon:"🔄", title:"Token Manager",    desc:"The platform for token distributions, vesting, and lockups" },
-        { icon:"💳", title:"Payments",         desc:"The stablecoin payments stack for commerce platforms" },
-        { icon:"🔲", title:"Asset Listings",   desc:"List your asset on Coinbase", link:"/asset-details" },
+        { icon: "🗂", title: "Business", desc: "Crypto trading and payments for startups and SMBs" },
+        { icon: "🔄", title: "Token Manager", desc: "The platform for token distributions, vesting, and lockups" },
+        { icon: "💳", title: "Payments", desc: "The stablecoin payments stack for commerce platforms" },
+        { icon: "🔲", title: "Asset Listings", desc: "List your asset on Coinbase", link: "/asset-details" },
       ]
     }]
   },
@@ -86,18 +87,18 @@ const NAV_SUBMENUS = {
       {
         title: "Prime", link: "#",
         items: [
-          { icon:"🕐", title:"Trading and Financing", desc:"Professional prime brokerage services" },
-          { icon:"🛡", title:"Custody",               desc:"Securely store all your digital assets" },
-          { icon:"％", title:"Staking",               desc:"Explore staking across our products" },
-          { icon:"⊞", title:"Onchain Wallet",        desc:"Institutional-grade wallet to get onchain" },
+          { icon: "🕐", title: "Trading and Financing", desc: "Professional prime brokerage services" },
+          { icon: "🛡", title: "Custody", desc: "Securely store all your digital assets" },
+          { icon: "％", title: "Staking", desc: "Explore staking across our products" },
+          { icon: "⊞", title: "Onchain Wallet", desc: "Institutional-grade wallet to get onchain" },
         ]
       },
       {
         title: "Markets",
         items: [
-          { icon:"✕",  title:"Exchange",              desc:"Spot markets for high-frequency trading" },
-          { icon:"🌐", title:"International Exchange", desc:"Access perpetual futures markets" },
-          { icon:"↔", title:"Derivatives Exchange",   desc:"Trade an accessible futures market" },
+          { icon: "✕", title: "Exchange", desc: "Spot markets for high-frequency trading" },
+          { icon: "🌐", title: "International Exchange", desc: "Access perpetual futures markets" },
+          { icon: "↔", title: "Derivatives Exchange", desc: "Trade an accessible futures market" },
         ]
       }
     ]
@@ -107,18 +108,18 @@ const NAV_SUBMENUS = {
       {
         title: "Coinbase Developer Platform", link: "#",
         items: [
-          { icon:"⊙", title:"Payments",   desc:"Fast and global stablecoin payments with a single integration" },
-          { icon:"📊", title:"Trading",   desc:"Launch crypto trading and custody for your users" },
-          { icon:"🗂", title:"Wallets",   desc:"Deploy customizable and scalable wallets for your business" },
-          { icon:"⊙", title:"Stablecoins",desc:"Access USDC and Coinbase Custom Stablecoins" },
+          { icon: "⊙", title: "Payments", desc: "Fast and global stablecoin payments with a single integration" },
+          { icon: "📊", title: "Trading", desc: "Launch crypto trading and custody for your users" },
+          { icon: "🗂", title: "Wallets", desc: "Deploy customizable and scalable wallets for your business" },
+          { icon: "⊙", title: "Stablecoins", desc: "Access USDC and Coinbase Custom Stablecoins" },
         ]
       },
       {
         title: "Solutions for any company",
         items: [
-          { icon:"🏛", title:"Banks & Brokerages", desc:"Secure, regulated offerings for retail, private banking, & institutional clients" },
-          { icon:"💳", title:"Payment Firms",      desc:"Near-instant, low-cost, global payment rails for modern providers" },
-          { icon:"⚡", title:"Startups",           desc:"Launch your business with the world's leader in crypto" },
+          { icon: "🏛", title: "Banks & Brokerages", desc: "Secure, regulated offerings for retail, private banking, & institutional clients" },
+          { icon: "💳", title: "Payment Firms", desc: "Near-instant, low-cost, global payment rails for modern providers" },
+          { icon: "⚡", title: "Startups", desc: "Launch your business with the world's leader in crypto" },
         ]
       }
     ]
@@ -126,12 +127,12 @@ const NAV_SUBMENUS = {
   company: {
     sections: [{
       items: [
-        { icon:"ℹ", title:"About",     desc:"Powering the crypto economy" },
-        { icon:"💬", title:"Support",   desc:"Find answers to your questions" },
-        { icon:"💼", title:"Careers",   desc:"Work with us" },
-        { icon:"📰", title:"Blog",      desc:"Read the latest from Coinbase" },
-        { icon:"👥", title:"Affiliates",desc:"Help introduce the world to crypto" },
-        { icon:"🛡", title:"Security",  desc:"The most trusted & secure" },
+        { icon: "ℹ", title: "About", desc: "Powering the crypto economy" },
+        { icon: "💬", title: "Support", desc: "Find answers to your questions" },
+        { icon: "💼", title: "Careers", desc: "Work with us" },
+        { icon: "📰", title: "Blog", desc: "Read the latest from Coinbase" },
+        { icon: "👥", title: "Affiliates", desc: "Help introduce the world to crypto" },
+        { icon: "🛡", title: "Security", desc: "The most trusted & secure" },
       ]
     }]
   }
@@ -168,8 +169,8 @@ function ResultRow({ item }) {
       {/* price + change */}
       <div className="text-right shrink-0">
         <p className="text-[14px] font-semibold text-gray-900">{item.price}</p>
-        <p className={`text-[12px] font-medium flex items-center justify-end gap-0.5 ${item.neg ? "text-red-500":"text-emerald-600"}`}>
-          <span>{item.neg ? "↘":"↗"}</span>{item.change.replace(/^[+-]/,"")}
+        <p className={`text-[12px] font-medium flex items-center justify-end gap-0.5 ${item.neg ? "text-red-500" : "text-emerald-600"}`}>
+          <span>{item.neg ? "↘" : "↗"}</span>{item.change.replace(/^[+-]/, "")}
         </p>
       </div>
     </Link>
@@ -202,9 +203,8 @@ function SearchPanel({ tab, setTab, query }) {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-semibold transition ${
-              tab === t ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
+            className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] font-semibold transition ${tab === t ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
           >
             {t}
           </button>
@@ -287,18 +287,23 @@ function LanguagePanel({ query, setQuery, selected, setSelected, close }) {
 /* ── NAVBAR ───────────────────────────────────────────── */
 export default function Navbar() {
   const navigate = useNavigate();
-  const [showSearch,    setShowSearch]    = useState(false);
-  const [showLang,      setShowLang]      = useState(false);
-  const [mobileMenu,    setMobileMenu]    = useState(false);
-  const [activeSubMenu, setActiveSubMenu] = useState(null);
-  const [dropdownOpen,  setDropdownOpen]  = useState(false);
-
+  const location = useLocation();
+  const { navTitle } = useApp();
   const { isAuthenticated, isLoading } = useAuth();
 
-  const [searchTab,    setSearchTab]    = useState("Top");
-  const [searchQuery,  setSearchQuery]  = useState("");
-  const [langQuery,    setLangQuery]    = useState("");
-  const [selectedLang, setSelectedLang] = useState({ name:"English", region:"Global" });
+  const isDashboard = location.pathname === "/profile";
+
+  const [showSearch, setShowSearch] = useState(false);
+  const [showLang, setShowLang] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
+
+  const [searchTab, setSearchTab] = useState("Top");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [langQuery, setLangQuery] = useState("");
+  const [selectedLang, setSelectedLang] = useState({ name: "English", region: "Global" });
 
   const navRef = useRef(null);
 
@@ -308,6 +313,7 @@ export default function Navbar() {
     setMobileMenu(false);
     setActiveSubMenu(null);
     setDropdownOpen(false);
+    setSearchExpanded(false);
   };
 
   /* close on outside click */
@@ -326,18 +332,65 @@ export default function Navbar() {
     return () => document.removeEventListener("keydown", handler);
   }, []);
 
-  /* lock body scroll when menu is open */
-  useEffect(() => {
-    if (mobileMenu) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileMenu]);
+  const openSearch = () => { setShowSearch(true); setShowLang(false); setMobileMenu(false); setActiveSubMenu(null); };
+  const openLang = () => { setShowLang(true); setShowSearch(false); setMobileMenu(false); setActiveSubMenu(null); };
 
-  const openSearch = () => { setShowSearch(true);  setShowLang(false); setMobileMenu(false); setActiveSubMenu(null); };
-  const openLang   = () => { setShowLang(true);    setShowSearch(false); setMobileMenu(false); setActiveSubMenu(null); };
+  if (isDashboard) {
+    return (
+      <header ref={navRef} className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
+        <div className="relative flex h-[64px] items-center px-4">
+          {/* Left side empty placeholder */}
+          <div className="flex-1" />
+
+          {/* Centre Title */}
+          <h1 className="text-[18px] font-bold text-[#0A0B0D] absolute left-1/2 -translate-x-1/2 truncate max-w-[200px]">
+            {navTitle}
+          </h1>
+
+          {/* Right side cluster */}
+          <div className="ml-auto flex items-center gap-4 flex-1 justify-end">
+            {/* Expanding Search Bar */}
+            <div
+              className={`relative flex items-center h-9 rounded-lg bg-gray-100 transition-all duration-300 ease-in-out ${searchExpanded ? "w-[300px] ring-2 ring-[#0052FF]" : "w-[200px]"
+                }`}
+            >
+              <FiSearch className={`ml-3 shrink-0 ${searchExpanded ? "text-[#0052FF]" : "text-gray-400"}`} size={16} />
+              <input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setSearchExpanded(true)}
+                onBlur={() => !searchQuery && setSearchExpanded(false)}
+                placeholder="Search"
+                className="flex-1 bg-transparent px-2 text-[14px] outline-none placeholder:text-gray-500"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery("")} className="mr-2 text-gray-400 hover:text-gray-600">
+                  <FiX size={14} />
+                </button>
+              )}
+
+              {searchExpanded && searchQuery && (
+                <div className="absolute top-[calc(100%+8px)] right-0 w-[350px]">
+                  <SearchPanel tab={searchTab} setTab={setSearchTab} query={searchQuery} />
+                </div>
+              )}
+            </div>
+
+            <button className="flex h-9 w-9 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100 transition">
+              <FiBell size={20} />
+            </button>
+
+            <div className="relative flex items-center gap-1 group cursor-pointer" onClick={() => setDropdownOpen(p => !p)}>
+              <AvatarButton onClick={(e) => { e.stopPropagation(); setDropdownOpen(p => !p); }} />
+              <FiChevronDown className={`text-gray-400 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} size={16} />
+              <NavDropdown isOpen={dropdownOpen} onClose={() => setDropdownOpen(false)} />
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
 
   return (
     <header ref={navRef} className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
@@ -473,77 +526,77 @@ export default function Navbar() {
         <div className="fixed inset-x-0 top-[68px] bottom-0 z-[150] flex flex-col bg-white border-t border-gray-200 shadow-md overflow-y-auto">
 
           <div className="flex-1">
-          {/* ── MAIN LIST (no sub-menu selected) ── */}
-          {!activeSubMenu && (
-            <>
-              <Link to="/explore" onClick={closeAll}
-                className="flex items-center px-6 py-5 text-[20px] font-semibold text-gray-900 hover:bg-gray-50 transition">
-                Cryptocurrencies
-              </Link>
-              {[
-                { label:"Individuals",  key:"individuals"  },
-                { label:"Businesses",   key:"businesses"   },
-                { label:"Institutions", key:"institutions" },
-                { label:"Developers",   key:"developers"   },
-                { label:"Company",      key:"company"      },
-              ].map(({ label, key }) => (
-                <button key={key}
-                  onClick={() => setActiveSubMenu(key)}
-                  className="flex w-full items-center justify-between border-t border-gray-100 px-6 py-5 text-[20px] font-semibold text-gray-900 hover:bg-gray-50 transition">
-                  {label}
-                  <span className="text-gray-400 text-[22px] font-light">›</span>
-                </button>
-              ))}
-            </>
-          )}
-
-          {/* ── SUB-PANEL ── */}
-          {activeSubMenu && NAV_SUBMENUS[activeSubMenu] && (() => {
-            const menu = NAV_SUBMENUS[activeSubMenu];
-            return (
-              <div className="px-6 py-6 overflow-y-auto max-h-[80vh]">
-                {menu.sections.map((sec, si) => (
-                  <div key={si} className={si > 0 ? "mt-8" : ""}>
-                    {/* Section header */}
-                    {sec.title && (
-                      <button className="flex items-center gap-1 mb-5 text-[15px] font-semibold text-gray-900 hover:underline">
-                        {sec.title} {sec.link && <span className="text-gray-400">›</span>}
-                      </button>
-                    )}
-                    {/* Items grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
-                      {sec.items.map((item, ii) => (
-                        <button key={ii} onClick={() => { closeAll(); if (item.link) navigate(item.link); }}
-                          className="flex items-start gap-3 rounded-xl px-3 py-4 text-left hover:bg-gray-50 transition">
-                          {/* Icon box */}
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-[18px]">
-                            {item.icon}
-                          </div>
-                          <div>
-                            <p className="text-[14px] font-semibold text-gray-900 leading-tight">{item.title}</p>
-                            <p className="mt-0.5 text-[12px] text-gray-500 leading-snug">{item.desc}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+            {/* ── MAIN LIST (no sub-menu selected) ── */}
+            {!activeSubMenu && (
+              <>
+                <Link to="/explore" onClick={closeAll}
+                  className="flex items-center px-6 py-5 text-[20px] font-semibold text-gray-900 hover:bg-gray-50 transition">
+                  Cryptocurrencies
+                </Link>
+                {[
+                  { label: "Individuals", key: "individuals" },
+                  { label: "Businesses", key: "businesses" },
+                  { label: "Institutions", key: "institutions" },
+                  { label: "Developers", key: "developers" },
+                  { label: "Company", key: "company" },
+                ].map(({ label, key }) => (
+                  <button key={key}
+                    onClick={() => setActiveSubMenu(key)}
+                    className="flex w-full items-center justify-between border-t border-gray-100 px-6 py-5 text-[20px] font-semibold text-gray-900 hover:bg-gray-50 transition">
+                    {label}
+                    <span className="text-gray-400 text-[22px] font-light">›</span>
+                  </button>
                 ))}
-              </div>
-            );
-          })()}
+              </>
+            )}
+
+            {/* ── SUB-PANEL ── */}
+            {activeSubMenu && NAV_SUBMENUS[activeSubMenu] && (() => {
+              const menu = NAV_SUBMENUS[activeSubMenu];
+              return (
+                <div className="px-6 py-6 overflow-y-auto max-h-[80vh]">
+                  {menu.sections.map((sec, si) => (
+                    <div key={si} className={si > 0 ? "mt-8" : ""}>
+                      {/* Section header */}
+                      {sec.title && (
+                        <button className="flex items-center gap-1 mb-5 text-[15px] font-semibold text-gray-900 hover:underline">
+                          {sec.title} {sec.link && <span className="text-gray-400">›</span>}
+                        </button>
+                      )}
+                      {/* Items grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
+                        {sec.items.map((item, ii) => (
+                          <button key={ii} onClick={() => { closeAll(); if (item.link) navigate(item.link); }}
+                            className="flex items-start gap-3 rounded-xl px-3 py-4 text-left hover:bg-gray-50 transition">
+                            {/* Icon box */}
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-[18px]">
+                              {item.icon}
+                            </div>
+                            <div>
+                              <p className="text-[14px] font-semibold text-gray-900 leading-tight">{item.title}</p>
+                              <p className="mt-0.5 text-[12px] text-gray-500 leading-snug">{item.desc}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
 
           {/* ── MOBILE MENU FOOTER ── */}
           <div className="p-6 mt-auto flex items-center gap-3 pb-8 sm:hidden">
-            <button 
+            <button
               onClick={openLang}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-900 transition hover:bg-gray-200"
             >
               <FiGlobe size={18} />
             </button>
             {!isAuthenticated && (
-              <Link 
-                to="/signin" 
+              <Link
+                to="/signin"
                 onClick={closeAll}
                 className="flex h-10 px-6 items-center justify-center rounded-full bg-gray-100 text-[15px] font-semibold text-gray-900 transition hover:bg-gray-200"
               >

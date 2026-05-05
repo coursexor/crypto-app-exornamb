@@ -46,6 +46,8 @@ export default function SignIn() {
                 }
             } catch (err) {
                 setError(err.response?.data?.message || "Login failed. Please try again.");
+                alert(err.response?.data?.message);
+                console.log(import.meta.env.VITE_API_BASE_URL);
             }
         }
     };

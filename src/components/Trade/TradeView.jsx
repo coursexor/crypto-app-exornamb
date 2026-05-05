@@ -137,7 +137,7 @@ export default function TradeView({ showToast }) {
       <h1 className="trade-title">Crypto market prices</h1>
 
       {/* FILTER BAR */}
-      <div className="filter-bar">
+      <div className="filter-bar horizontal-scroll-container">
         {/* Assets Filter */}
         <div className="dropdown-container" onClick={(e) => e.stopPropagation()}>
           <button className="filter-pill" onClick={() => setOpenDropdown(openDropdown === 'assets' ? null : 'assets')}>
@@ -196,7 +196,7 @@ export default function TradeView({ showToast }) {
       </div>
 
       {/* TABLE */}
-      <div className="trade-table-container">
+      <div className="trade-table-container table-scroll-wrapper">
         <table className="trade-table">
           <thead>
             <tr>

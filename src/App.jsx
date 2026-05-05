@@ -8,29 +8,26 @@ import Learn from "./pages/Learn";
 import SignIn from "./pages/Signin";
 import SignUp from "./pages/Signup";
 import AccountType from "./components/layout/AccountType";
-import PageLayout from "./components/layout/PageLayout";
-import ProfilePage from "./pages/ProfilePage";
-import ProtectedRoute from "./components/layout/ProtectedRoute";
+import ProfileLayout from "./layouts/ProfileLayout";
 
-// Main application component that defines the routing for all pages
 export default function App() {
   const { pathname } = useLocation();
-  const hideNavbar = pathname === "/signin" || pathname === "/signup" || pathname === "/account-type";
+  const hideNavbar = ["/signin", "/signup", "/account-type", "/profile"].includes(pathname);
 
   return (
     <>
-      <WarningBanner />
+      {pathname === "/" && <WarningBanner />}
       {!hideNavbar && <Navbar />}
       <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/explore" element={<ExplorePage />} />
-      <Route path="/asset-details" element={<AssetDetail />} />
-      <Route path="/learn" element={<Learn />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/account-type" element={<AccountType />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/asset-details" element={<AssetDetail />} />
+        <Route path="/learn" element={<Learn />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/account-type" element={<AccountType />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/profile" element={<ProfileLayout />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

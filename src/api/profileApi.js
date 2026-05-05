@@ -101,6 +101,40 @@ export async function getNewListings() {
   }
 }
 
+export async function getTransactions(token, filters = {}) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+  // Build query string from non-null/undefined filter values
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, val]) => {
+    if (val !== null && val !== undefined && val !== '') {
+      params.set(key, val);
+    }
+  });
+  const qs = params.toString();
+
+  try {
+    const response = await fetch(`${BASE_URL}/api/transactions${qs ? `?${qs}` : ''}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+      signal: controller.signal
+    });
+
+    if (!response.ok) {
+      let errData;
+      try { errData = await response.json(); } catch (e) { errData = { error: e.message }; }
+      const error = new Error(errData.error || 'Failed to fetch transactions');
+      error.status = response.status;
+      throw error;
+    }
+
+    return await response.json();
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 export async function getPrices() {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
