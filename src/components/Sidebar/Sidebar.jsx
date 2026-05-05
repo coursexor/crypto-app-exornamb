@@ -2,19 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-const CoinbaseMark = ({ size = 22 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="12" fill="#1652F0" />
-    <circle cx="12" cy="12" r="6.6" fill="#FFFFFF" />
-    <circle cx="12" cy="12" r="4.4" fill="#1652F0" />
-  </svg>
-);
-
 const IconHouse = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -125,9 +112,6 @@ export default function Sidebar({
       <aside className={`profile-sidebar ${isCollapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-top-row">
           <div className="sidebar-logo-group" onClick={() => navigate('/')}>
-            <span className="sidebar-logo-mark">
-              <CoinbaseMark />
-            </span>
             <span className="sidebar-app-name">Coinbase</span>
           </div>
           <button className="sidebar-collapse-btn desktop-only" onClick={onToggle}>

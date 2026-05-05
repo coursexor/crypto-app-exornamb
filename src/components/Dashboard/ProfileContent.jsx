@@ -31,20 +31,22 @@ export default function ProfileContent({
   setNotifications
 }) {
   const { user, account, portfolio, holdings } = profile || {};
+  const safeHoldings = Array.isArray(holdings) ? holdings : [];
+  const safePortfolio = portfolio || { totalValueUsd: 0 };
 
   const views = {
     dashboard: (
       <DashboardView 
-        portfolio={portfolio} 
-        holdings={holdings} 
+        portfolio={safePortfolio} 
+        holdings={safeHoldings} 
         showToast={showToast} 
         setActiveView={setActiveView} 
       />
     ),
     assets: (
       <AssetsView 
-        holdings={holdings} 
-        portfolio={portfolio} 
+        holdings={safeHoldings} 
+        portfolio={safePortfolio} 
       />
     ),
     trade: (

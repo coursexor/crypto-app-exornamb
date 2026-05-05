@@ -4,12 +4,13 @@ import Sparkline from '../Trade/Sparkline';
 import './Dashboard.css';
 
 export default function AssetList({ holdings, setActiveView, showAll = false }) {
+  const safeHoldings = Array.isArray(holdings) ? holdings : [];
   const [sortOrder, setSortOrder] = useState('Value');
   const [filter, setFilter] = useState('Owned');
 
   // We could implement actual sorting logic here based on sortOrder
   // e.g. Value, Gainers, Losers, Name
-  let sortedHoldings = [...holdings];
+  let sortedHoldings = [...safeHoldings];
   
   if (sortOrder === 'Gainers') {
     sortedHoldings.sort((a, b) => b.changePercent - a.changePercent);

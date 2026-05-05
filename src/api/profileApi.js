@@ -1,6 +1,13 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+function requireBaseUrl() {
+  if (!BASE_URL || typeof BASE_URL !== 'string') {
+    throw new Error("Missing VITE_API_BASE_URL (set this in your production host env vars).");
+  }
+}
+
 export async function getProfile(token) {
+  requireBaseUrl();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -28,6 +35,7 @@ export async function getProfile(token) {
 }
 
 export async function patchProfile(token, updates) {
+  requireBaseUrl();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -58,6 +66,7 @@ export async function patchProfile(token, updates) {
 }
 
 export async function getGainers() {
+  requireBaseUrl();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -80,6 +89,7 @@ export async function getGainers() {
 }
 
 export async function getNewListings() {
+  requireBaseUrl();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -102,6 +112,7 @@ export async function getNewListings() {
 }
 
 export async function getTransactions(token, filters = {}) {
+  requireBaseUrl();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -136,6 +147,7 @@ export async function getTransactions(token, filters = {}) {
 }
 
 export async function getPrices() {
+  requireBaseUrl();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
